@@ -86,6 +86,8 @@ public:
     QRectF boundingRect() const override { return QRectF(); }
     void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *) override {}
 
+    void setShowAllLabels(bool show);
+
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
@@ -126,6 +128,8 @@ private:
     QHash<MapObject*, QList<ObjectReferenceItem*>> mReferencesBySourceObject;
     QHash<MapObject*, QList<ObjectReferenceItem*>> mReferencesByTargetObject;
     std::unique_ptr<MapObjectItem> mHoveredMapObjectItem;
+
+    bool mShowAllLabels = false;
 };
 
 } // namespace Tiled

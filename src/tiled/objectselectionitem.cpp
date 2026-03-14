@@ -350,6 +350,14 @@ const MapRenderer &ObjectSelectionItem::mapRenderer() const
     return *mMapDocument->renderer();
 }
 
+void ObjectSelectionItem::setShowAllLabels(bool show)
+{
+    if (mShowAllLabels == show)
+        return;
+    mShowAllLabels = show;
+    addRemoveObjectLabels();
+}
+
 QVariant ObjectSelectionItem::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == ItemSceneChange) {
@@ -791,7 +799,12 @@ void ObjectSelectionItem::addRemoveObjectLabels()
         if (MapObject *object = mMapDocument->hoveredMapObject())
             ensureLabel(object);
 
-    switch (objectLabelVisibility()) {
+    auto visibility = objectLabelVisibility();
+    if (mShowAllLabels) {
+        visibility = Preferences::AllObjectLabels;
+    }
+
+    switch (visibility) {
     case Preferences::AllObjectLabels: {
         LayerIterator iterator(mMapDocument->map(), Layer::ObjectGroupType);
         while (auto objectGroup = static_cast<ObjectGroup*>(iterator.next())) {
